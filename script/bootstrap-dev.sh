@@ -4,6 +4,9 @@
 #
 set -eu -o pipefail
 
+# TODO: Add checks for direnv, pyenv & nmap
+direnv allow
+
 cd "$(dirname "$0")/.."
 
 # Parse .python-version

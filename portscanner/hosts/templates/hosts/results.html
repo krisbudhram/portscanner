@@ -16,9 +16,9 @@
             <tr>
               <th>Host</th>
               <th>Scan Time</th>
-              <th>Duration</th>
               <th>Open Ports</th>
               <th>Changes</th>
+              <th>Duration</th>
             </tr>
           </thead>
           <tbody>
@@ -31,15 +31,15 @@
                 {{ scan.scan_time }}
               </td>
               <td>
-                {{ scan.duration }} seconds
-              </td>
-              <td>
                 {% for port in scan.ports.open %}
                     {{ port }}
                 {% endfor %}
               </td>
               <td>
                 {{ scan.changed }}
+              </td>
+              <td>
+                {{ scan.duration }} seconds
               </td>
             </tr>
           {% endfor %}

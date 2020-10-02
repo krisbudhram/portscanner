@@ -23,9 +23,15 @@ class HostScan(TimeStampedModel):
         return self.created.ctime()
 
     def changed_ports(self, scanlist: list) -> str:
+        """
+        From a list, produce a string containing the differences between
+        this instance's scan and the previous scan. It there isn't a
+        previous scan, return an empty string.
+        """
         changed = ""
         try:
-            # Since scanlist is already ordered by created, just pick the first element
+            # Since scanlist is already ordered by created, just pick the
+            # first element
             previous = [
                 x
                 for x in scanlist

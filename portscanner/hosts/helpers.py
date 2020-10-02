@@ -34,6 +34,7 @@ def scan_target(target: str) -> dict:
         scan_host = nm.all_hosts()[0]
         host_info = scan["scan"][scan_host]
         results["open_ports"] = []
+        # TODO: Fix monkeypatch and replace with nm[scan_host].all_protocols()
         for proto in ["tcp", "udp"]:
             # Ensure only open ports are tracked.
             results["open_ports"].extend(

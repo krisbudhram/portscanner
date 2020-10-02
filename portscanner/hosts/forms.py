@@ -6,6 +6,9 @@ from . import models
 
 
 class HostScanForm(forms.Form):
+    """
+    Scan tab 'Scan' form
+    """
     target = forms.CharField(max_length=100)
 
     def __init__(self, *args, **kwargs):
@@ -13,6 +16,9 @@ class HostScanForm(forms.Form):
 
 
 class HostResultForm(forms.Form):
+    """
+    Result tab 'Search' form
+    """
     host = forms.CharField(max_length=100)
 
     def __init__(self, *args, **kwargs):

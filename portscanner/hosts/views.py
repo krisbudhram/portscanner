@@ -65,10 +65,10 @@ class ScanResults(FormMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         host = self.get_form_kwargs().get("data").get("host", "")
-
         try:
-            url = reverse("portscanner.hosts:results", args=(host,))
-        except NoReverseMatch:
-            url = reverse("portscanner.hosts:results")
+            models.Host.objects.get(label=host)
+        except models.Host.DoesNotExist:
+            messages.error(request, f"No records for host {host}")
+            return HttpResponseRedirect(reverse("portscanner.hosts:results"))
 
-        return HttpResponseRedirect(url)
+        return HttpResponseRedirect(reverse("portscanner.hosts:results", args=(host,)))

@@ -6,7 +6,7 @@ stores a history of previous scans and highlights changes to the user.
 Written in Django.
 
 ## Access
-
+After [setup](Setup), the site is available at http://localhost:8000
 
 ### Scan tab
 Type in the target host to scan and click "Scan". The server will initiate an
@@ -22,6 +22,8 @@ This application uses a SQLite database. Run the migrate step in [setup](Setup)
 to initialize the database.
 
 ## Development
+Django will automatically pick up code changes and reload the site. Use
+`django-admin shell_plus` to interact with the ORM.
 
 ### Prerequisites
 To develop this application the following are required.
@@ -31,10 +33,11 @@ To develop this application the following are required.
 4. Permission to scan remote hosts
 
 ### Setup
-`script/bootstrap-dev.sh`
-`direnv allow`
-`django-admin migrate`
-`django-admin runserver_plus` - starts the local development server
+1. `script/bootstrap-dev.sh`
+2. `direnv allow`
+3. `django-admin migrate`
+4. `django-admin runserver_plus` - starts the local development server
+5. `open http://localhost:8000`
 
 ### Updating Packages
 Vendor packages used to run in production.
@@ -46,7 +49,4 @@ Vendor packages used to run in production.
 
 ## Limitations
 * Only ports 1-1000 are scanned.
-
-
-
 
