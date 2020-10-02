@@ -13,7 +13,7 @@ def validate_target(target: str) -> bool:
     """
     try:
         gethostbyname(target)
-    except gaierror:
+    except (gaierror, UnicodeError):
         return False
     return True
 

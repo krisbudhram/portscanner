@@ -34,7 +34,7 @@ To develop this application the following are required.
 
 ### Setup
 1. `script/bootstrap-dev.sh`
-2. `direnv allow`
+2. `direnv reload`
 3. `django-admin migrate`
 4. `django-admin runserver_plus` - starts the local development server
 5. `open http://localhost:8000`
