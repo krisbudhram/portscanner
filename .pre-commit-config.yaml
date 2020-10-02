@@ -1,0 +1,9 @@
+repos:
+- repo: local
+  hooks:
+    - id: pystyle
+      name: pystyle
+      language: script
+      entry: script/style-fix
+      files: (portscanner|tests|conftest)/*.*\.py$
+      exclude: (migrations|vendor)

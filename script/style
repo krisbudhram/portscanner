@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#
+# Show style diff for Python files.
+#
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+files=""
+isort_opts="--diff"
+black_opts="--diff"
+DEV=/dev/stdout
+
+for lib in $(find vendor/ -type d -maxdepth 1 | grep -v "\.egg-info$" | cut -d\/ -f4 | grep -v __pycache__ | grep -v "^$" | grep -v "^django$"); do
+  isort_thirdparty="${isort_thirdparty} --thirdparty ${lib}"
+done
+
+isort_opts="${isort_opts} ${isort_thirdparty}"
+
+for arg in "$@"; do
+  if [[ "$arg" = "--write" ]]; then
+    isort_opts="${isort_thirdparty} --apply"
+    black_opts="-q"
+  else
+    files="${files} ${arg}"
+  fi
+done
+
+if [[ -z $files ]]; then
+  files="conftest.py portscanner"
+fi
+
+# if [[ -z $files ]]; then
+#   files="conftest.py tests"
+#   for app in $DCM_APPS; do
+#     files="${files} dcm/$app"
+#   done
+#   for app in $DCM_PROXY_APPS; do
+#     files="${files} dcm/$app"
+#   done
+# fi
+
+echo "Checking files with isort"
+isort --recursive --quiet --skip-glob "*migrations*" --skip-glob "*__pycache__*" $isort_opts $files
+
+echo "Checking files with black"
+black --exclude "/(migrations|pycache)/" $black_opts $files

@@ -1,0 +1,8 @@
+.vscode
+*.pyc
+pytest-report.xml
+.idea
+.DS_Store
+db.sqlite3
+/.coverage
+__pycache__

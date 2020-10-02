@@ -1,0 +1,11 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+    environment:
+      - PYTHONPATH=/opt/portscanner:/opt/portscanner/vendor/
+    volumes:
+      - ${PWD}:/opt/portscanner
+    ports:
+      - "8080:80"

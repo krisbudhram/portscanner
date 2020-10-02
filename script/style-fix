@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# Fix style in all Python files.
+#
+
+set -eu -o pipefail
+
+cd "$(dirname "$0")/.."
+
+script/style --write $@

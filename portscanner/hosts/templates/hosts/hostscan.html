@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="col-6 container">
+    {% include 'messages.html' %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit" id="bt" class="btn btn-success w-25 m-2">Scan</button>
+    </form>
+  </div>
+  <script>
+    $(document).ready(function () {
+        $('#bt').click(function () {
+          $("#bt").html("Scanning...");
+      });
+    });
+  </script>
+{% endblock %}
