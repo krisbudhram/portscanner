@@ -31,7 +31,10 @@ def scan_target(target: str) -> dict:
         return {}
 
     try:
-        scan_host = nm.all_hosts()[0]
+        try:
+            scan_host = nm.all_hosts()[0]
+        except IndexError:
+            return {}
         host_info = scan["scan"][scan_host]
         results["open_ports"] = []
         # TODO: Fix monkeypatch and replace with nm[scan_host].all_protocols()

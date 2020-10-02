@@ -22,18 +22,20 @@ def hostscan(request):
             return render(request, "hosts/hostscan.html", {"form": form})
 
         # Execute Nmap scan
-        scan = helpers.scan_target(target)
+        if scan := helpers.scan_target(target):
+            host, _ = models.Host.objects.get_or_create(label=target)
+            hostscan = models.HostScan.objects.create(
+                target=host,
+                ports={"open": scan.get("open_ports", [])},
+                duration=scan["elapsed"],
+            )
 
-        host, _ = models.Host.objects.get_or_create(label=target)
-        hostscan = models.HostScan.objects.create(
-            target=host,
-            ports={"open": scan.get("open_ports", [])},
-            duration=scan["elapsed"],
-        )
-
-        return HttpResponseRedirect(
-            reverse("portscanner.hosts:results", args=(host.label,))
-        )
+            return HttpResponseRedirect(
+                reverse("portscanner.hosts:results", args=(host.label,))
+            )
+        else:
+            messages.error(request, f"Unable to nmap scan host target {target}")
+            return render(request, "hosts/hostscan.html", {"form": form})
 
     return render(request, "hosts/hostscan.html", {"form": form})
 
