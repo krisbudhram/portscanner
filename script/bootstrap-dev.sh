@@ -19,6 +19,9 @@ pyenv virtualenv -f ${version} ${venv}
 # If missing vendor directory, install packages.
 [ ! -d "vendor" ] && script/update-vendor.sh
 
+# Install pre-commit hooks
+pre-commit install
+
 pip install -r dev-requirements.txt || echo "!! Cannot install dev requirements !!"
 
 echo "Bootstrap complete"

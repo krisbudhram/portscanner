@@ -56,12 +56,6 @@ class ScanResults(FormMixin, ListView):
         else:
             context = {"hostscans": self.queryset.all()}
 
-        # Make a list to pass into changed_ports, since filtering querysets would hit
-        # the database each time.
-        scanlist = list(self.queryset)
-        for scan in context["hostscans"]:
-            scan.changed = scan.changed_ports(scanlist)
-
         context.update(kwargs)
         return super().get_context_data(**context)
 

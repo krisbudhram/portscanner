@@ -34,7 +34,8 @@ def scan_target(target: str) -> dict:
         try:
             scan_host = nm.all_hosts()[0]
         except IndexError:
-            return {}
+            # Scan found no open ports. May or may not be indicative of network issue.
+            return results
         host_info = scan["scan"][scan_host]
         results["open_ports"] = []
         # TODO: Fix monkeypatch and replace with nm[scan_host].all_protocols()

@@ -12,13 +12,13 @@ def test_hostscan(hostscan, target) -> None:
         duration=1,
     )
 
-    result = hostscan_new.changed_ports([hostscan_new, hostscan])
-    assert result == "Closed 999/tcp"
+    result = hostscan_new.changed
+    assert "Closed 999/tcp" in result
 
     hostscan_new2 = HostScan.objects.create(
         target=target,
         ports={"open": ["999/tcp", "22/tcp"]},
         duration=1,
     )
-    result = hostscan_new2.changed_ports([hostscan_new2, hostscan])
-    assert result == "Opened 22/tcp"
+    result = hostscan_new2.changed
+    assert "22/tcp" in result

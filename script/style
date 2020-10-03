@@ -31,16 +31,6 @@ if [[ -z $files ]]; then
   files="conftest.py portscanner"
 fi
 
-# if [[ -z $files ]]; then
-#   files="conftest.py tests"
-#   for app in $DCM_APPS; do
-#     files="${files} dcm/$app"
-#   done
-#   for app in $DCM_PROXY_APPS; do
-#     files="${files} dcm/$app"
-#   done
-# fi
-
 echo "Checking files with isort"
 isort --recursive --quiet --skip-glob "*migrations*" --skip-glob "*__pycache__*" $isort_opts $files
 
