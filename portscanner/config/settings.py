@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from os import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,10 +24,12 @@ root = BASE_DIR.parent
 SECRET_KEY = "u7z&fa4v&$clum185pq0$*h4*y3x&76m9vl=f05sj^zm+75$qf"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if environ.get("ENVIRONMENT", "") == "prod":
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = environ.get("ALLOWED_HOSTS", "localhost").split(" ")
 
 # Application definition
 
@@ -44,6 +47,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -77,10 +81,15 @@ WSGI_APPLICATION = "portscanner.config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+if DB_LOCATION := environ.get("DB_LOCATION"):
+    DB_LOCATION = Path(DB_LOCATION).resolve()
+else:
+    DB_LOCATION = BASE_DIR
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": DB_LOCATION / "db.sqlite3",
     }
 }
 
@@ -123,7 +132,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["frontend/templates"],
+        "DIRS": ["frontend/templates", root / "frontend/templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -141,13 +150,9 @@ TEMPLATES = [
 
 # Static content
 STATIC_ROOT = root / "web/static/"
-# if DEBUG:
-#     STATIC_URL = "/static/"
-#     STATICFILES_DIRS = (root("frontend/static"),)
-# else:
-#     if not os.path.isdir(STATIC_ROOT):
-#         raise ImproperlyConfigured("Unable to find STATIC_ROOT: {}".format(STATIC_ROOT))
-#     STATIC_URL = "/static/{}/".format(STATIC_VERSION)
 
+# URL to serve from
 STATIC_URL = "/static/"
+
+# Source file locations
 STATICFILES_DIRS = ((root / "frontend/static"),)

@@ -1,12 +1,19 @@
 # portscanner
 
-portscanner is a UI application for Nmap scanning hosts for open ports. It
-stores a history of previous scans and highlights changes to the user.
-
-Written in Django.
+portscanner is a Django UI application for Nmap scanning hosts for open
+ports. It stores a history of previous scans and highlights changes to
+the user.
 
 ## Access
-After [setup](Setup), the site is available at http://localhost:8000
+Start a production-like environment using Docker containers.
+1. `docker-compose up --build`
+2. `open http://localhost`
+
+This builds app and nginx docker containers with separate docker volume for
+sqlite DB. Since source files are copied into the app container, this is
+intended for UAT or Production-style testing.
+
+See the [this](Development) section for regular development setup.
 
 ### Scan tab
 Type in the target host to scan and click "Scan". The server will initiate an
@@ -46,6 +53,9 @@ Vendor packages used to run in production.
 
 ## Testing
 `script/test` to run tests and generate coverage report
+
+## Release
+Update Changelog with information about the release.
 
 ## Limitations
 * Only ports 1-1000 are scanned.

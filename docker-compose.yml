@@ -1,11 +1,32 @@
-version: "3"
+version: "3.4"
 services:
   app:
     build:
       context: .
+      dockerfile: docker/app/Dockerfile
+    command: ./docker/app/start_docker_app.sh
     environment:
+      - PATH=$PATH:/opt/portscanner/vendor/bin
+      - DJANGO_SETTINGS_MODULE=portscanner.config.settings
       - PYTHONPATH=/opt/portscanner:/opt/portscanner/vendor/
+      - ALLOWED_HOSTS=app localhost
+      - DB_LOCATION=/var/sqldb/
+      - ENVIRONMENT=prod
     volumes:
-      - ${PWD}:/opt/portscanner
+      - db_data:/var/sqldb/
     ports:
-      - "8080:80"
+      - "8000:8000"
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+
+
+volumes:
+  db_data:
+    external: false

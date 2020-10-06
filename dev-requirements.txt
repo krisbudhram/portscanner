@@ -6,8 +6,8 @@
 #
 appdirs==1.4.4            # via black, virtualenv
 astroid==2.4.2            # via pylint
-attrs==20.2.0             # via pytest
-black==20.8b1             # via -r dev-requirements.in
+attrs==20.2.0             # via black, pytest
+black==19.10b0            # via -r dev-requirements.in
 cfgv==3.2.0               # via pre-commit
 click==7.1.2              # via black, pip-tools
 coverage==5.3             # via pytest-cov
@@ -18,7 +18,6 @@ iniconfig==1.0.1          # via pytest
 isort==5.5.4              # via pylint
 lazy-object-proxy==1.4.3  # via astroid
 mccabe==0.6.1             # via pylint
-mypy-extensions==0.4.3    # via black
 nodeenv==1.5.0            # via pre-commit
 packaging==20.4           # via pytest
 pathspec==0.8.0           # via black
@@ -38,7 +37,6 @@ regex==2020.9.27          # via black
 six==1.15.0               # via astroid, packaging, pip-tools, virtualenv
 toml==0.10.1              # via black, pre-commit, pylint, pytest
 typed-ast==1.4.1          # via black
-typing-extensions==3.7.4.3  # via black
 virtualenv==20.0.32       # via pre-commit
 werkzeug==1.0.1           # via -r dev-requirements.in
 wrapt==1.12.1             # via astroid
