@@ -1,0 +1,55 @@
+body {
+  background-color: #F5F5F5;
+}
+
+.navbar > .container-fluid,
+.navbar a,
+.navbar a:hover {
+  color: black !important;
+  background-color: white;
+}
+
+/* Generic round/sharp for corners */
+.sharp {
+  border-radius:0;
+}
+.round {
+  border-radius:12px;
+}
+
+.btn, .btn:hover, .btn:active {
+  border: none;
+  background-image: none;
+  line-height: 18px;
+  padding-left: 16px;
+  padding-right: 18px;
+  font-weight: 600;
+  font-size: 13px;
+  text-shadow: none;
+  transition: all 0.2s ease 0s;
+}
+
+/* Nicer panels */
+.panel {
+  border-radius: 0px;
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+  overflow: auto;
+}
+
+.panel-default > .panel-heading {
+  background-color: white !important;
+  margin-left: 16px !important;
+  margin-right: 16px !important;
+  padding-left: 4px !important;
+}
+
+/* Prevent wrapping text inside a panel table */
+.panel-default > .panel-body > table {
+  white-space: nowrap;
+}
+
+.table td, .table th {
+  padding: .25rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
