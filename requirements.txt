@@ -9,6 +9,11 @@ django-crispy-forms==1.9.2  # via -r requirements.in
 django-extensions==3.0.9  # via -r requirements.in
 django-querycount==0.7.0  # via -r requirements.in
 django==3.1.1             # via -r requirements.in
+gunicorn==20.0.4          # via -r requirements.in
 python-nmap==0.6.1        # via -r requirements.in
 pytz==2020.1              # via django
 sqlparse==0.3.1           # via django
+whitenoise==5.2.0         # via -r requirements.in
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

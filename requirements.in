@@ -2,4 +2,6 @@ Django==3.1.1
 django-extensions
 django-crispy-forms
 django-querycount
+gunicorn
 python-nmap
+WhiteNoise==5.2.0
