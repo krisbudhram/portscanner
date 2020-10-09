@@ -19,7 +19,7 @@ def test_hostscan(client, monkeypatch):
     assert response.status_code == 200
 
     # Test scan
-    response = client.post(hostscan_view, {"target": "192.168.1.1"})
+    response = client.post(hostscan_view, {"label": "192.168.1.1"})
 
     assert response.status_code == 302
     assert response.url == "/results/192.168.1.1"
@@ -28,6 +28,16 @@ def test_hostscan(client, monkeypatch):
     hostscan = models.HostScan.objects.get(target__label="192.168.1.1")
 
     assert set(["22/tcp", "80/tcp"]) == set(hostscan.ports["open"])
+
+
+@pytest.mark.django_db
+def test_hostscan_fail(client):
+    hostscan_view = reverse("portscanner.hosts:hostscan")
+    response = client.post(hostscan_view, {"label": "invalid.host"})
+
+    assert response.status_code == 200
+    assert "Error: Invalid target, please resubmit" in response.content.decode()
+    assert models.Host.objects.filter(label="invalid.host").count() == 0
 
 
 @pytest.mark.django_db
@@ -40,7 +50,7 @@ def test_scanresults(client, hostscan):
     assert hostscan.target.label in response.content.decode()
 
     # Test search
-    response = client.post(scanresults_view, {"host": hostscan.target.label})
+    response = client.post(scanresults_view, {"label": hostscan.target.label})
 
     assert response.status_code == 302
     assert response.url == f"/results/{hostscan.target.label}"
@@ -54,13 +64,13 @@ def test_scanresults_host(client, hostscan):
     )
     assert scanresults_view == f"/results/{hostscan.target.label}"
 
-    response = client.get(scanresults_view, {"req_target": "testhost.example.com"})
+    response = client.get(scanresults_view, {"label": "testhost.example.com"})
 
     assert response.status_code == 200
     assert hostscan.target.label in response.content.decode()
 
     # Test search
-    response = client.post(scanresults_view, {"host": "testhost.example.com"})
+    response = client.post(scanresults_view, {"label": "testhost.example.com"})
 
     assert response.status_code == 302
     assert response.url == "/results/testhost.example.com"

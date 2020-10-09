@@ -1,13 +1,39 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse_lazy
 from django_extensions.db.models import TimeStampedModel
+
+from . import helpers
 
 
 class Host(models.Model):
     # Hostname or IP
-    label = models.CharField(max_length=200)
+    label = models.CharField(max_length=200, unique=True)
+
+    def save(self, run_scan=False, **kwargs):
+        # Validate target
+        if run_scan:
+            if not helpers.validate_target(self.label):
+                raise ValidationError("Invalid target, please resubmit.")
+
+            # Execute Nmap scan
+            if scan := helpers.scan_target(self.label):
+                host, _ = Host.objects.get_or_create(label=self.label)
+                hostscan = HostScan.objects.create(
+                    target=host,
+                    ports={"open": scan.get("open_ports", [])},
+                    duration=scan["elapsed"],
+                )
+            else:
+                raise ValidationError(f"Unable to nmap scan host target {target}")
+        else:
+            super().save(**kwargs)
 
     def __str__(self):
         return self.label
+
+    def get_absolute_url(self):
+        return reverse_lazy("portscanner.hosts:results", kwargs={"slug": self.label})
 
 
 class HostScan(TimeStampedModel):

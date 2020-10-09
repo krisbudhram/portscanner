@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -13,29 +14,20 @@ def hostscan(request):
     form = forms.HostScanForm
 
     if request.method == "POST":
-        form_kwargs = request.POST
-        target = form_kwargs["target"]
+        form = forms.HostScanForm(request.POST)
 
-        # Validate target
-        if not helpers.validate_target(target):
-            messages.error(request, "Invalid target, please resubmit.")
-            return render(request, "hosts/hostscan.html", {"form": form})
-
-        # Execute Nmap scan
-        if scan := helpers.scan_target(target):
-            host, _ = models.Host.objects.get_or_create(label=target)
-            hostscan = models.HostScan.objects.create(
-                target=host,
-                ports={"open": scan.get("open_ports", [])},
-                duration=scan["elapsed"],
-            )
+        if form.is_valid():
+            try:
+                form.save(run_scan=True)
+            except ValidationError as e:
+                messages.error(request, f"Error: {e.message}")
+                return render(request, "hosts/hostscan.html", {"form": form})
 
             return HttpResponseRedirect(
-                reverse("portscanner.hosts:results", args=(host.label,))
+                reverse("portscanner.hosts:results", args=(form.data["label"],))
             )
         else:
-            messages.error(request, f"Unable to nmap scan host target {target}")
-            return render(request, "hosts/hostscan.html", {"form": form})
+            messages.error(request, f"Error: Invalid form submission")
 
     return render(request, "hosts/hostscan.html", {"form": form})
 
@@ -49,8 +41,8 @@ class ScanResults(FormMixin, ListView):
     )
 
     def get_context_data(self, **kwargs):
-        if req_target := self.kwargs.get("req_target"):
-            context = {"hostscans": self.queryset.filter(target__label=req_target)}
+        if slug := self.kwargs.get("slug"):
+            context = {"hostscans": self.queryset.filter(target__label=slug)}
             if not context["hostscans"]:
                 raise Http404
         else:
@@ -60,11 +52,10 @@ class ScanResults(FormMixin, ListView):
         return super().get_context_data(**context)
 
     def post(self, request, *args, **kwargs):
-        host = self.get_form_kwargs().get("data").get("host", "")
-        try:
-            models.Host.objects.get(label=host)
-        except models.Host.DoesNotExist:
-            messages.error(request, f"No records for host {host}")
-            return HttpResponseRedirect(reverse("portscanner.hosts:results"))
+        form = self.get_form()
+        if form.is_valid():
+            return HttpResponseRedirect(form.instance.get_absolute_url())
+        else:
+            messages.error(request, f"No records for host")
 
-        return HttpResponseRedirect(reverse("portscanner.hosts:results", args=(host,)))
+        return HttpResponseRedirect(request.path_info)
