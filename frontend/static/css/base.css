@@ -53,3 +53,5 @@ body {
   vertical-align: top;
   border-top: 1px solid #dee2e6;
 }
+
+.top-buffer { margin-top: 30px;}

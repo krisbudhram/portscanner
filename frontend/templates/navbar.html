@@ -1,8 +1,10 @@
-
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="m-2 nav-item nav-link round active" href={% url 'portscanner.hosts:hostscan' %}>Scan <span class="sr-only">(current)</span></a>
-        <a class="m-2 nav-item nav-link round" href={% url 'portscanner.hosts:results' %}>Results <span class="sr-only">(current)</span></a>
-    </div>
-  </nav>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    {% url 'portscanner.hosts:hostscan' as scan_url %}
+    <a class="nav-link {% if request.path == scan_url %} active {% endif %}" href={% url 'portscanner.hosts:hostscan' %}>Scan</a>
+  </li>
+  <li class="nav-item">
+    {% url 'portscanner.hosts:results' as results_url %}
+    <a class="nav-link {% if request.path == results_url %} active {% endif %}" href={% url 'portscanner.hosts:results' %}>All Results</a>
+  </li>
+</ul>

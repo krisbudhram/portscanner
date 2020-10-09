@@ -1,8 +1,8 @@
 {% if messages %}
 <div class="row justify-content-md-center m-2">
-  <div class="col col-lg-6">
+  <div class="col col-lg-8">
     {% for message in messages %}
-        <span>{{ message|safe }}</span>
+        <span style="color:red">{{ message|safe }}</span>
     {% endfor %}
   </div>
 </div>

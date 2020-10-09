@@ -1,4 +1,5 @@
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit
 from django import forms
 
 from . import models
@@ -13,6 +14,19 @@ class HostScanForm(forms.ModelForm):
         model = models.Host
         fields = ["label"]
         labels = {"label": "Host"}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-lg-2"
+        self.helper.field_class = "col-lg-8"
+        self.helper.add_input(
+            Submit("submit", "Scan", css_id="bt", css_class="btn btn-success w-25")
+        )
+        self.helper.layout = Layout(
+            "label",
+        )
 
     def save(self, run_scan=True, **kwargs):
         try:
@@ -36,6 +50,19 @@ class HostResultForm(forms.ModelForm):
         model = models.Host
         fields = ["label"]
         labels = {"label": "Host"}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-lg-2"
+        self.helper.field_class = "col-lg-8"
+        self.helper.add_input(
+            Submit("submit", "Search", css_class="btn btn-success w-25")
+        )
+        self.helper.layout = Layout(
+            "label",
+        )
 
     def is_valid(self):
         try:
