@@ -43,6 +43,7 @@ class ScanResults(FormMixin, ListView):
     def get_context_data(self, **kwargs):
         if slug := self.kwargs.get("slug"):
             context = {"hostscans": self.queryset.filter(target__label=slug)}
+            context["slug"] = slug
             if not context["hostscans"]:
                 raise Http404
         else:
