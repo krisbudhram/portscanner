@@ -9,11 +9,12 @@
       {% crispy form %}
     </form>
   </div>
-  <!-- <script>
+  <script>
     $(document).ready(function () {
-        $("#bt")[0].click(function () {
-          $("#bt")[0].value = "Scanning...";
+        $("#bt").click(function () {
+          $("#bt").addClass("w-35").removeClass("w-25")
+          $("#bt").prop("value", "Scanning...");
       });
     });
-  </script> -->
+  </script>
 {% endblock %}
